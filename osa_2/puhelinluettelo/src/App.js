@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
+import './index.css'
 
 const Filter = (props) => {
   return (
@@ -52,12 +53,28 @@ const DeleteButton = (props) => {
   )
 }
 
+const Notification = (props) => {
+  
+  if (props.message === null) {
+    return null
+  } else {
+    return (
+    <div className={props.type}>
+        {props.message}
+      </div>
+    )
+  }
+}
+
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterString, setFilterString ] = useState('')
+  const [ message, setMessage ] = useState('')
+  const [ messageType, setMessageType ] = useState('')
+
 
   useEffect(() => {
     personService
@@ -80,10 +97,10 @@ const App = () => {
   }
 
   const handleDeleteButton = (event) => {
-    const name = persons.find(person => person.id == event.target.id).name
+    const name = persons.find(person => person.id === event.target.id).name
     if (window.confirm(`Delete ${name}?`)) {
       personService.del(event.target.id)
-      setPersons(persons.filter(person => person.id != event.target.id))
+      setPersons(persons.filter(person => person.id !== event.target.id))
     }
   }
 
@@ -97,12 +114,15 @@ const App = () => {
     }
     if (persons.some(p => p.name === newName)) {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        const id = persons.find(person => person.name == newName).id
+        const id = persons.find(person => person.name === newName).id
         personService
           .update(id, personObject)
           .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
         })
+        setMessageType('add')
+        setMessage(`Added ${newName}`)
+        setTimeout(() => {setMessage(null)}, 5000)
       }
     } else {
       personService
@@ -112,6 +132,9 @@ const App = () => {
           setNewName('')
           setNewNumber('')
       })
+      setMessageType('add')
+      setMessage(`Added ${newName}`)
+      setTimeout(() => {setMessage(null)}, 5000)
     }
   }
 
@@ -120,6 +143,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={message} type={messageType} />
 
       <Filter string={filterString} handler={handleFilterString} />
       
