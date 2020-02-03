@@ -30,21 +30,28 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ({ persons }) => {
+const Persons = (props) => {
   return (
     <div>
-      {persons.map(person => <Person key={person.name} person={person} />)}
+      {props.persons.map(person => <Person key={person.name} person={person} deleteButtonHandler={props.deleteButtonHandler} />)}
     </div>
   )
 }
 
-const Person = ({ person }) => {
+const Person = (props) => {
   return (
     <>
-    {person.name} {person.number}<br />
+    {props.person.name} {props.person.number} <DeleteButton key={props.person.name} id={props.person.id} deleteButtonHandler={props.deleteButtonHandler} /><br />
     </>
   )
 }
+
+const DeleteButton = (props) => {
+  return (
+    <button id={props.id} onClick={props.deleteButtonHandler}>delete</button>
+  )
+}
+
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
@@ -70,6 +77,14 @@ const App = () => {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
+  }
+
+  const handleDeleteButton = (event) => {
+    const name = persons.find(person => person.id == event.target.id).name
+    if (window.confirm(`Delete ${name}?`)) {
+      personService.del(event.target.id)
+      setPersons(persons.filter(person => person.id != event.target.id))
+    }
   }
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filterString.toLowerCase()))
@@ -111,7 +126,7 @@ const App = () => {
       
       <h2>Numbers</h2>
         
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deleteButtonHandler={handleDeleteButton} />
 
     </div>
   )

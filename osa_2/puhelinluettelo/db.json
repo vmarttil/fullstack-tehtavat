@@ -19,41 +19,6 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
-    },
-    {
-      "name": "Testi Henkilö",
-      "number": "050-34426457",
-      "id": 5
-    },
-    {
-      "name": "Uusi Henkilö",
-      "number": "040-35667759",
-      "id": 6
-    },
-    {
-      "name": "Kolmas Henkilö",
-      "number": "040-35645747",
-      "id": 7
-    },
-    {
-      "name": "Uusi Testihenkilö",
-      "number": "044-5646767",
-      "id": 8
-    },
-    {
-      "name": "Vielä Yksi Testihenkilö",
-      "number": "050-24535647",
-      "id": 9
-    },
-    {
-      "name": " Vielä Henkilö",
-      "number": "040-34536",
-      "id": 10
-    },
-    {
-      "name": "Lisää Henkilöitä",
-      "number": "050-234245",
-      "id": 11
     }
   ]
 }
