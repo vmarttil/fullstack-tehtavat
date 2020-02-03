@@ -2,29 +2,29 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 
-const Countries = ({ countriesToShow }) => {
-  if (countriesToShow.length === 0) {
+const Countries = (props) => {
+  if (props.countriesToShow.length === 0) {
     return (
       <div>
         <p>No matches</p>
       </div>
         )
-  } else if (countriesToShow.length > 10) {
+  } else if (props.countriesToShow.length > 10) {
     return (
       <div>
         <p>Too many matches, specify another filter</p>
       </div>
     )
-  } else if (countriesToShow.length > 1) {
+  } else if (props.countriesToShow.length > 1) {
     return (
       <div>
-        {countriesToShow.map(country => <Country key={country.name} country={country} />)}
+        {props.countriesToShow.map(country => <Country key={country.name} country={country} infoButtonHandler={props.infoButtonHandler} />)}
       </div> 
     )
   } else {
     return (
       <div>
-        {countriesToShow.map(country => <CountryData key={country.name} country={country} />)}
+        {props.countriesToShow.map(country => <CountryData key={country.name} country={country} />)}
       </div>
     )
   }
@@ -32,7 +32,7 @@ const Countries = ({ countriesToShow }) => {
 
 const Country = (props) => {
   return (
-    <>{props.country.name}<br /></>
+    <>{props.country.name} <InfoButton key={props.country.name} country={props.country} infoButtonHandler={props.infoButtonHandler} /> <br /></>
   )
 }
 
@@ -59,6 +59,11 @@ const Language = (props) => {
   )
 }
 
+const InfoButton = (props) => {
+  return (
+    <button id={props.country.name} onClick={props.infoButtonHandler}>show</button>
+  )
+}
 
 
 const App = () => {
@@ -68,7 +73,10 @@ const App = () => {
 
   const handleSearchString = (event) => {
     setSearchString(event.target.value)
+  }
 
+  const handleInfoButton = (event) => {
+    setSearchString(event.target.id)
   }
 
   const countriesToShow = countries.filter(country => country.name.toLowerCase().includes(searchString.toLowerCase()))
@@ -88,7 +96,7 @@ const App = () => {
                   value={searchString}
                   onChange={handleSearchString} /></p>
 
-          <Countries countriesToShow={countriesToShow} />      
+          <Countries countriesToShow={countriesToShow} infoButtonHandler={handleInfoButton} />      
     </div>
   );
 }
